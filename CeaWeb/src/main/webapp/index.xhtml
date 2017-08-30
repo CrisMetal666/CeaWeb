@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
+
+	<ui:define name="title">Inicio</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="form">
+
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Buscar: " />
+				<p:inputText id="txtBuscar" value="#{indexBean.txtBuscar}">
+					<p:ajax event="keyup" update="form"
+						listener="#{indexBean.buscar()}" />
+				</p:inputText>
+
+				<h:inputHidden value="" />
+				<p:selectOneListbox id="lista" rendered = "#{indexBean.visible eq true}" 
+					value="#{indexBean.idMunicipio}" style="width:400px" >
+					<f:selectItems value="#{indexBean.lista}"  var="ls" itemLabel="#{ls.nombre}" itemValue="#{ls.id}"/>
+					<p:ajax update="form" listener="#{indexBean.seleccionar()}" />
+				</p:selectOneListbox>
+				
+			</h:panelGrid>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+
+</html>

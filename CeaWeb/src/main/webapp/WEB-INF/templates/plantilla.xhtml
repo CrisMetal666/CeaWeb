@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+	<title><ui:insert name="title">plantilla</ui:insert></title>
+	
+	<h:outputStylesheet library="css" name="style.css" />
+
+</h:head>
+<body>
+
+	<div>
+
+		<ui:insert name="header">
+
+			<p:breadCrumb>
+				<p:menuitem value="Categories" url="#" />
+				<p:menuitem value="Sports" url="#" />
+				<p:menuitem value="Basketball" url="#" />
+				<p:menuitem value="NBA" url="#" />
+				<p:menuitem value="Teams" url="#" />
+				<p:menuitem value="L.A. Lakers" url="#" />
+				<p:menuitem value="Roster" url="#" />
+				<p:menuitem value="Kobe Bryant" url="#" />
+			</p:breadCrumb>
+
+		</ui:insert>
+
+	</div>
+	
+	<p:separator />
+
+	<div class="contenedor">
+		<ui:insert name="content" />
+	</div>
+
+</body>
+</html>
