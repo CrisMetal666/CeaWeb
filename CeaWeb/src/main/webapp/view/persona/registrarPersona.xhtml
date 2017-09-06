@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
+
+	<ui:define name="title">Inicio</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="formulario">
+
+			<p:messages id="mensajes" autoUpdate="false" closable="true"
+				showDetail="false" />
+
+			<p:wizard >
+
+				<p:tab id="personal" title="Personal">
+
+					<h:panelGrid columns="3">
+
+						<p:outputLabel for="nombres" value="Nombres:" />
+						<p:inputText id="nombres"
+							value="#{registrarPersonaBean.persona.nombres}" required="true" />
+						<p:message for="nombres" display="text" />
+
+						<p:outputLabel for="apellidos" value="Apellidos:" />
+						<p:inputText id="apellidos"
+							value="#{registrarPersonaBean.persona.apellidos}" required="true" />
+						<p:message for="apellidos" display="text" />
+
+						<p:outputLabel for="tipoDocumento" value="Tipo documento:" />
+						<p:selectOneMenu id="tipoDocumento"
+							value="#{registrarPersonaBean.tipoDocumento.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" />
+							<f:selectItems value="#{registrarPersonaBean.lstTipoDocumento}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="tipoDocumento" display="text" />
+
+						<p:outputLabel for="identificacion" value="Identificación:" />
+						<p:inputText id="identificacion"
+							value="#{registrarPersonaBean.persona.identificacion}"
+							required="true" />
+						<p:message for="identificacion" display="text" />
+
+						<p:outputLabel for="correo" value="Correo:" />
+						<p:inputText id="correo"
+							value="#{registrarPersonaBean.persona.email}" required="true" />
+						<p:message for="correo" display="text" />
+
+						<p:outputLabel for="rh" value="Rh:" />
+						<p:selectOneMenu id="rh"
+							value="#{registrarPersonaBean.persona.rh}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItem itemLabel="O+" itemValue="O+" />
+							<f:selectItem itemLabel="O-" itemValue="O-" />
+							<f:selectItem itemLabel="A+" itemValue="A+" />
+							<f:selectItem itemLabel="A-" itemValue="A-" />
+							<f:selectItem itemLabel="B+" itemValue="B+" />
+							<f:selectItem itemLabel="B-" itemValue="B-" />
+							<f:selectItem itemLabel="AB+" itemValue="AB+" />
+							<f:selectItem itemLabel="AB-" itemValue="AB-" />
+						</p:selectOneMenu>
+						<p:message for="rh" display="text" />
+
+						<p:outputLabel for="genero" value="Genero:" />
+						<p:selectOneMenu id="genero"
+							value="#{registrarPersonaBean.genero.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstGenero}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="genero" display="text" />
+
+						<p:outputLabel for="estadoCivil" value="Estado civil:" />
+						<p:selectOneMenu id="estadoCivil"
+							value="#{registrarPersonaBean.estadoCivil.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstEstadoCivil}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="estadoCivil" display="text" />
+
+						<p:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento:" />
+						<p:calendar id="fechaNacimiento"
+							value="#{registrarPersonaBean.persona.fechaNacimiento}"
+							required="true" pattern="dd/MM/yyyy" />
+						<p:message for="fechaNacimiento" display="text" />
+
+						<p:outputLabel for="lugarOrigen" value="Lugar de origen:" />
+						<p:autoComplete id="lugarOrigen"
+							value="#{registrarPersonaBean.lugarOrigen}"
+							completeMethod="#{registrarPersonaBean.buscar}" var="ciudad"
+							itemLabel="#{ciudad.nombre}" itemValue="#{ciudad}"
+							forceSelection="true" minQueryLength="4">
+							
+							<o:converter converterId="omnifaces.ListConverter" list="#{registrarPersonaBean.lstLugarOrigen}" />	
+						
+						</p:autoComplete>
+						<p:message for="lugarOrigen" display="text" />
+
+						<p:outputLabel for="estrato" value="Estrato:" />
+						<p:selectOneMenu id="estrato"
+							value="#{registrarPersonaBean.estrato.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstEstrato}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="estrato" display="text" />
+
+						<p:outputLabel for="regimenSalud" value="Regimen de salud:" />
+						<p:selectOneMenu id="regimenSalud"
+							value="#{registrarPersonaBean.regimenSalud.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstRegimenSalud}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="regimenSalud" display="text" />
+
+						<p:outputLabel for="nivelFormacion" value="Nivel de formacion:" />
+						<p:selectOneMenu id="nivelFormacion"
+							value="#{registrarPersonaBean.nivelFormacion.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstNivelFormacion}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="nivelFormacion" display="text" />
+
+						<p:outputLabel for="ocupacion" value="Ocupación:" />
+						<p:selectOneMenu id="ocupacion"
+							value="#{registrarPersonaBean.ocupacion.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstOcupacion}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="ocupacion" display="text" />
+
+						<p:outputLabel for="discapacidad" value="Discapacidad:" />
+						<p:selectOneMenu id="discapacidad"
+							value="#{registrarPersonaBean.discapacidad.id}" required="true">
+							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{registrarPersonaBean.lstDiscapacidad}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="discapacidad" display="text" />
+
+					</h:panelGrid>
+
+				</p:tab>
+
+				<p:tab id="multiculturalidad" title="Multiculturalidad">
+
+					<h:panelGrid columns="2">
+
+
+						<p:outputLabel value="Indigena" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[0]}" />
+
+						<p:outputLabel value="Afrodecendiente" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[1]}" />
+
+						<p:outputLabel value="Desplazado" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[2]}" />
+
+						<p:outputLabel value="Población frontera" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[3]}" />
+
+						<p:outputLabel value="Cabeza de familia" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[4]}" />
+
+						<p:outputLabel value="Reinsertado" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[5]}" />
+
+						<p:outputLabel value="Poblacion room" />
+						<p:selectBooleanCheckbox
+							value="#{registrarPersonaBean.multiculturalidad[6]}" />
+
+						<p:commandButton value="Guardar"
+							actionListener="#{registrarPersonaBean.guardar()}"
+							update="mensajes" />
+						<p:commandButton value="Cancelar"
+							actionListener="#{registrarPersonaBean.limpiarControles()}" />
+
+
+
+					</h:panelGrid>
+
+				</p:tab>
+
+
+			</p:wizard>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

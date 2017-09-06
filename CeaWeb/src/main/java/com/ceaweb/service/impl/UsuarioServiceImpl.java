@@ -46,4 +46,10 @@ public class UsuarioServiceImpl implements IUsuarioService, Serializable{
 		return UsuarioDAO.listarPorId(entidad);
 	}
 
+	@Override
+	public Usuario iniciarSesion(String identificacion, String clave) throws Exception {
+		
+		return UsuarioDAO.iniciarSesion(identificacion, clave);
+	}
+
 }

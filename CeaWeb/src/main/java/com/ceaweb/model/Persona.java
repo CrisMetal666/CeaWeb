@@ -106,8 +106,8 @@ public class Persona implements Serializable {
     @Column(name = "poblacion_room")
     private String poblacionRoom;
     
-    @Basic(optional = false)
-    @Column(name = "url_foto")
+    //@Basic(optional = true)
+    @Column(name = "url_foto", nullable = true)
     private String urlFoto;
     
     @Basic(optional = false)
@@ -118,8 +118,8 @@ public class Persona implements Serializable {
     @Column(name = "email")
     private String email;
     
-    @Basic(optional = false)
-    @Column(name = "url_firma")
+    //@Basic(optional = true)
+    @Column(name = "url_firma", nullable = true)
     private String urlFirma;
     
     @JoinColumn(name = "idcea", referencedColumnName = "id")
@@ -428,9 +428,19 @@ public class Persona implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.ceaweb.Persona[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "Persona [id=" + id + ", identificacion=" + identificacion + ", nombres=" + nombres + ", apellidos="
+				+ apellidos + ", fechaNacimiento=" + fechaNacimiento + ", indigena=" + indigena + ", afrodecendiente="
+				+ afrodecendiente + ", desplazado=" + desplazado + ", poblacionFrontera=" + poblacionFrontera
+				+ ", cabezaFamilia=" + cabezaFamilia + ", reinsertado=" + reinsertado + ", poblacionRoom="
+				+ poblacionRoom + ", urlFoto=" + urlFoto + ", rh=" + rh + ", email=" + email + ", urlFirma=" + urlFirma
+				+ ", idcea=" + idcea.getId() + ", lugarOrigen=" + lugarOrigen.getId() + ", genero=" + genero.getId() + ", estadoCivil="
+				+ estadoCivil.getId() + ", estrato=" + estrato.getId() + ", regimenSalud=" + regimenSalud.getId() + ", ocupacion=" + ocupacion.getId()
+				+ ", discapacidad=" + discapacidad + ", nivelFormacion=" + nivelFormacion + ", tipoDocumento="
+				+ tipoDocumento.getId() +  "]";
+	}
+
+    
     
 }

@@ -10,6 +10,7 @@ import javax.inject.Named;
 import com.ceaweb.dao.IDataCategoriaDAO;
 import com.ceaweb.model.DataCategoria;
 import com.ceaweb.service.IDataCategoriaService;
+import com.ceaweb.util.FormatearCadena;
 
 @Named
 @RequestScoped
@@ -37,13 +38,92 @@ public class DataCategoriaServiceImpl implements IDataCategoriaService, Serializ
 	@Override
 	public List<DataCategoria> listarTodos() throws Exception {
 		
-		return DataCategoriaDAO.listarTodos();
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.listarTodos());
 	}
 
 	@Override
 	public DataCategoria listarPorId(DataCategoria entidad) throws Exception {
 		
 		return DataCategoriaDAO.listarPorId(entidad);
+	}
+
+	@Override
+	public List<DataCategoria> getJornada() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getJornada());
+	}
+
+	@Override
+	public List<DataCategoria> getTipoIdentificacion() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getTipoIdentificacion());
+	}
+
+	@Override
+	public List<DataCategoria> getGenero() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getGenero());
+	}
+
+	@Override
+	public List<DataCategoria> getEstadoCivil() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getEstadoCivil());
+	}
+
+	@Override
+	public List<DataCategoria> getLugarOrigen() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getLugarOrigen());
+	}
+
+	@Override
+	public List<DataCategoria> getEstrato() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getEstrato());
+	}
+
+	@Override
+	public List<DataCategoria> getRegimenSalud() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getRegimenSalud());
+	}
+
+	@Override
+	public List<DataCategoria> getNivelFormacion() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getNivelFormacion());
+	}
+
+	@Override
+	public List<DataCategoria> getOcupacion() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getOcupacion());
+	}
+
+	@Override
+	public List<DataCategoria> getDiscapacidad() throws Exception {
+
+		return FormatearCadena.formatearCadena(DataCategoriaDAO.getDiscapacidad());
+	}
+
+	@Override
+	public List<DataCategoria> buscarCiudadPorNombre(String nombre) throws Exception {
+		
+		List<DataCategoria> lista = FormatearCadena.formatearCadena(DataCategoriaDAO.buscarCiudadPorNombre(nombre));
+		
+		if(lista == null || lista.isEmpty()) {
+			
+			// Agregamos un item a la lista con un mensaje q diga al usuario q no hay registros
+			DataCategoria dataCategoria = new DataCategoria();
+			dataCategoria.setNombre("No hay registros");
+			dataCategoria.setId(-1);
+			
+			lista.add(dataCategoria);
+			
+		}
+		
+		return lista;
 	}
 
 }

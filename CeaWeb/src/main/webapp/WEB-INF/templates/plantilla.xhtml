@@ -10,6 +10,8 @@
 	<title><ui:insert name="title">plantilla</ui:insert></title>
 	
 	<h:outputStylesheet library="css" name="style.css" />
+	
+	<f:event listener="#{plantillaBean.verificarSesion()}" type="preRenderView" />
 
 </h:head>
 <body>

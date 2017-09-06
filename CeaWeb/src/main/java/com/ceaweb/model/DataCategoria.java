@@ -300,9 +300,11 @@ public class DataCategoria implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.ceaweb.DataCategoria[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "DataCategoria [id=" + id + ", nombre=" + nombre + "]";
+	}
+
+  
     
 }

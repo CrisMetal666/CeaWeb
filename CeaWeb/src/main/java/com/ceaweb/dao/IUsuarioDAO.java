@@ -9,4 +9,5 @@ import com.ceaweb.model.Usuario;
  */
 public interface IUsuarioDAO extends IDAO<Usuario> {
 
+	Usuario iniciarSesion(String identificacion, String clave) throws Exception ;
 }
