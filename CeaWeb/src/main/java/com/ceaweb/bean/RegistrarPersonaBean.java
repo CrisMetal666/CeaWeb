@@ -38,7 +38,8 @@ public class RegistrarPersonaBean implements Serializable{
 	private DataCategoria tipoDocumento;
 	private DataCategoria genero;
 	private DataCategoria estadoCivil;
-	private DataCategoria lugarOrigen = new DataCategoria();;
+	private DataCategoria lugarOrigen;
+	private DataCategoria documentoExpedicion;
 	private DataCategoria estrato;
 	private DataCategoria regimenSalud;
 	private DataCategoria nivelFormacion;
@@ -53,6 +54,7 @@ public class RegistrarPersonaBean implements Serializable{
 	private List<DataCategoria> lstNivelFormacion;
 	private List<DataCategoria> lstOcupacion;
 	private List<DataCategoria> lstDiscapacidad;
+	private List<DataCategoria> lstDocumentoExpedicion;
 	/**
 	 * Guardara los item seleccionados en el checkbox en el siguiente orden
 	 * index - valor 
@@ -95,6 +97,7 @@ public class RegistrarPersonaBean implements Serializable{
 		genero = new DataCategoria();
 		estadoCivil = new DataCategoria();
 		lugarOrigen = new DataCategoria();
+		documentoExpedicion = new DataCategoria();
 		estrato = new DataCategoria();
 		regimenSalud = new DataCategoria();
 		nivelFormacion = new DataCategoria();
@@ -102,6 +105,7 @@ public class RegistrarPersonaBean implements Serializable{
 		discapacidad = new DataCategoria();
 		multiculturalidad = new boolean[7];
 		lstLugarOrigen = new ArrayList<>();
+		lstDocumentoExpedicion = new ArrayList<>();
 		
 	}
 	
@@ -109,24 +113,30 @@ public class RegistrarPersonaBean implements Serializable{
 	/**
 	 * Encargado de hacer la busqueda de la ciudad que contenga la cadena especifcada por el usuario
 	 */
-	public List<DataCategoria> buscar(String text) {
+	public List<DataCategoria> buscarLugarOrigen(String text) {
 
 		try {
+			System.out.println("---- buscarLugarOrigen");
 			lstLugarOrigen = dataCategoriaService.buscarCiudadPorNombre(text);
-			
-			//Guardamos la lista en la sesion para poder aceder a ella en el converter (DataCategoriaConverter)
-			if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("lstCiudades") == null) {
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("lstCiudades", lstLugarOrigen);
-			}else {
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("lstCiudades", lstLugarOrigen);
-			}
-	
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return lstLugarOrigen;
+	}
+	
+	public List<DataCategoria> buscarDocumentoExpedicion(String text) {
+
+		try {
+			System.out.println("---- buscarDocumentoExpedicion");
+			lstDocumentoExpedicion = dataCategoriaService.buscarCiudadPorNombre(text);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return lstDocumentoExpedicion;
 	}
 	
 	public void guardar() {
@@ -149,6 +159,7 @@ public class RegistrarPersonaBean implements Serializable{
 		persona.setNivelFormacion(nivelFormacion);
 		persona.setOcupacion(ocupacion);
 		persona.setDiscapacidad(discapacidad);
+		persona.setDocumentoExpedicion(documentoExpedicion);
 		
 		//datos multiculturalidad
 		/*
@@ -165,10 +176,18 @@ public class RegistrarPersonaBean implements Serializable{
 		
 		try {
 			
-			personaService.registrar(persona);
+			Persona per = personaService.buscarPorIdentificacion(persona);
 			
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Satifactorio", "La información fue registrada exitosamente");
-			FacesContext.getCurrentInstance().addMessage(null, message);
+			if(per != null) {
+				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Abvertencia", "El usuario ya existe");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}else {
+				
+				personaService.registrar(persona);
+				
+				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Satifactorio", "La información fue registrada exitosamente");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}		
 			
 			limpiarControles();
 			
@@ -341,6 +360,22 @@ public class RegistrarPersonaBean implements Serializable{
 
 	public void setMulticulturalidad(boolean[] multiculturalidad) {
 		this.multiculturalidad = multiculturalidad;
+	}
+
+	public DataCategoria getDocumentoExpedicion() {
+		return documentoExpedicion;
+	}
+
+	public void setDocumentoExpedicion(DataCategoria documentoExpedicion) {
+		this.documentoExpedicion = documentoExpedicion;
+	}
+
+	public List<DataCategoria> getLstDocumentoExpedicion() {
+		return lstDocumentoExpedicion;
+	}
+
+	public void setLstDocumentoExpedicion(List<DataCategoria> lstDocumentoExpedicion) {
+		this.lstDocumentoExpedicion = lstDocumentoExpedicion;
 	}
 
 

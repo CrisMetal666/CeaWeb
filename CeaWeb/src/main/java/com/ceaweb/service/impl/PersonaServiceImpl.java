@@ -46,4 +46,10 @@ public class PersonaServiceImpl implements IPersonaService, Serializable{
 		return PersonaDAO.listarPorId(entidad);
 	}
 
+	@Override
+	public Persona buscarPorIdentificacion(Persona per) throws Exception {
+		
+		return PersonaDAO.buscarPorIdentificacion(per);
+	}
+
 }

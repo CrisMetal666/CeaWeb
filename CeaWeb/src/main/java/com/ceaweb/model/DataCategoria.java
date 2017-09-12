@@ -302,7 +302,7 @@ public class DataCategoria implements Serializable {
 
 	@Override
 	public String toString() {
-		return "DataCategoria [id=" + id + ", nombre=" + nombre + "]";
+		return nombre;
 	}
 
   

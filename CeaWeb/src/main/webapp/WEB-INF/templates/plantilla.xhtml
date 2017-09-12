@@ -8,10 +8,11 @@
 <h:head>
 
 	<title><ui:insert name="title">plantilla</ui:insert></title>
-	
+
 	<h:outputStylesheet library="css" name="style.css" />
-	
-	<f:event listener="#{plantillaBean.verificarSesion()}" type="preRenderView" />
+
+	<f:event listener="#{plantillaBean.verificarSesion()}"
+		type="preRenderView" />
 
 </h:head>
 <body>
@@ -20,22 +21,54 @@
 
 		<ui:insert name="header">
 
-			<p:breadCrumb>
-				<p:menuitem value="Categories" url="#" />
-				<p:menuitem value="Sports" url="#" />
-				<p:menuitem value="Basketball" url="#" />
-				<p:menuitem value="NBA" url="#" />
-				<p:menuitem value="Teams" url="#" />
-				<p:menuitem value="L.A. Lakers" url="#" />
-				<p:menuitem value="Roster" url="#" />
-				<p:menuitem value="Kobe Bryant" url="#" />
-			</p:breadCrumb>
+			<p:tieredMenu styleClass="navegacion">
+			
+				<p:submenu label="Admin CEA">
+					<p:menuitem value="CEA" outcome="registrarPersona" />
+					<p:menuitem value="Auditoría" outcome="registrarPersona" />
+					<p:menuitem value="Configuración" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Cliente">
+					<p:menuitem value="Ingresar Cliente" outcome="registrarPersona" />
+					<p:menuitem value="Actualizar Cliente" outcome="registrarPersona" />
+					<p:menuitem value="Buscar Cliente" outcome="registrarPersona" />
+					<p:menuitem value="Informa Cliente" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Formación CEA">
+					<p:menuitem value="Certificación" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Formación no formal">
+					<p:menuitem value="XXXxx" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Facturación">
+					<p:menuitem value="xxxx" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Parque Automotor">
+					<p:menuitem value="xxxxx" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Empleados">
+					<p:menuitem value="Instructor" outcome="registrarPersona" />
+					<p:menuitem value="Administrador" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Evaluación teoría">
+					<p:menuitem value="xxxxxxxx" outcome="registrarPersona" />
+				</p:submenu>
+				
+				<p:submenu label="Infomormes/Reportes">
+					<p:menuitem value="xxxxxx" outcome="registrarPersona" />
+				</p:submenu>
+			</p:tieredMenu>
 
 		</ui:insert>
 
 	</div>
-	
-	<p:separator />
 
 	<div class="contenedor">
 		<ui:insert name="content" />

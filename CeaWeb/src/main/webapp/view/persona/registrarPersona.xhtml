@@ -14,7 +14,7 @@
 		<h:form id="formulario">
 
 			<p:messages id="mensajes" autoUpdate="false" closable="true"
-				showDetail="false" />
+				showDetail="true" />
 
 			<p:wizard >
 
@@ -24,17 +24,17 @@
 
 						<p:outputLabel for="nombres" value="Nombres:" />
 						<p:inputText id="nombres"
-							value="#{registrarPersonaBean.persona.nombres}" required="true" />
+							value="#{registrarPersonaBean.persona.nombres}" required="true" requiredMessage="Campo obligatorio." />
 						<p:message for="nombres" display="text" />
 
 						<p:outputLabel for="apellidos" value="Apellidos:" />
 						<p:inputText id="apellidos"
-							value="#{registrarPersonaBean.persona.apellidos}" required="true" />
+							value="#{registrarPersonaBean.persona.apellidos}" required="true" requiredMessage="Campo obligatorio." />
 						<p:message for="apellidos" display="text" />
 
 						<p:outputLabel for="tipoDocumento" value="Tipo documento:" />
-						<p:selectOneMenu id="tipoDocumento"
-							value="#{registrarPersonaBean.tipoDocumento.id}" required="true">
+						<p:selectOneMenu id="tipoDocumento" 
+							value="#{registrarPersonaBean.tipoDocumento.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" />
 							<f:selectItems value="#{registrarPersonaBean.lstTipoDocumento}"
 								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
@@ -44,17 +44,29 @@
 						<p:outputLabel for="identificacion" value="Identificación:" />
 						<p:inputText id="identificacion"
 							value="#{registrarPersonaBean.persona.identificacion}"
-							required="true" />
+							required="true" requiredMessage="Campo obligatorio." />
 						<p:message for="identificacion" display="text" />
+						
+						<p:outputLabel for="documentoExpedicion" value="Expedicion del documento:" />
+						<p:autoComplete id="documentoExpedicion"
+							value="#{registrarPersonaBean.documentoExpedicion}"
+							completeMethod="#{registrarPersonaBean.buscarDocumentoExpedicion}" var="ciudad"
+							itemLabel="#{ciudad.nombre}" itemValue="#{ciudad}"
+							forceSelection="true" minQueryLength="4" required="true" requiredMessage="Campo obligatorio." >
+							
+							<o:converter converterId="omnifaces.ListConverter" list="#{registrarPersonaBean.lstDocumentoExpedicion}" />	
+						
+						</p:autoComplete>
+						<p:message for="documentoExpedicion" display="text" />
 
 						<p:outputLabel for="correo" value="Correo:" />
 						<p:inputText id="correo"
-							value="#{registrarPersonaBean.persona.email}" required="true" />
+							value="#{registrarPersonaBean.persona.email}" required="true" requiredMessage="Campo obligatorio." />
 						<p:message for="correo" display="text" />
 
 						<p:outputLabel for="rh" value="Rh:" />
 						<p:selectOneMenu id="rh"
-							value="#{registrarPersonaBean.persona.rh}" required="true">
+							value="#{registrarPersonaBean.persona.rh}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItem itemLabel="O+" itemValue="O+" />
@@ -70,7 +82,7 @@
 
 						<p:outputLabel for="genero" value="Genero:" />
 						<p:selectOneMenu id="genero"
-							value="#{registrarPersonaBean.genero.id}" required="true">
+							value="#{registrarPersonaBean.genero.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstGenero}"
@@ -80,7 +92,7 @@
 
 						<p:outputLabel for="estadoCivil" value="Estado civil:" />
 						<p:selectOneMenu id="estadoCivil"
-							value="#{registrarPersonaBean.estadoCivil.id}" required="true">
+							value="#{registrarPersonaBean.estadoCivil.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstEstadoCivil}"
@@ -91,15 +103,15 @@
 						<p:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento:" />
 						<p:calendar id="fechaNacimiento"
 							value="#{registrarPersonaBean.persona.fechaNacimiento}"
-							required="true" pattern="dd/MM/yyyy" />
+							required="true" pattern="dd/MM/yyyy" requiredMessage="Campo obligatorio." />
 						<p:message for="fechaNacimiento" display="text" />
 
 						<p:outputLabel for="lugarOrigen" value="Lugar de origen:" />
 						<p:autoComplete id="lugarOrigen"
 							value="#{registrarPersonaBean.lugarOrigen}"
-							completeMethod="#{registrarPersonaBean.buscar}" var="ciudad"
+							completeMethod="#{registrarPersonaBean.buscarLugarOrigen}" var="ciudad"
 							itemLabel="#{ciudad.nombre}" itemValue="#{ciudad}"
-							forceSelection="true" minQueryLength="4">
+							forceSelection="true" minQueryLength="4" required="true" requiredMessage="Campo obligatorio." >
 							
 							<o:converter converterId="omnifaces.ListConverter" list="#{registrarPersonaBean.lstLugarOrigen}" />	
 						
@@ -108,7 +120,7 @@
 
 						<p:outputLabel for="estrato" value="Estrato:" />
 						<p:selectOneMenu id="estrato"
-							value="#{registrarPersonaBean.estrato.id}" required="true">
+							value="#{registrarPersonaBean.estrato.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstEstrato}"
@@ -118,7 +130,7 @@
 
 						<p:outputLabel for="regimenSalud" value="Regimen de salud:" />
 						<p:selectOneMenu id="regimenSalud"
-							value="#{registrarPersonaBean.regimenSalud.id}" required="true">
+							value="#{registrarPersonaBean.regimenSalud.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstRegimenSalud}"
@@ -128,7 +140,7 @@
 
 						<p:outputLabel for="nivelFormacion" value="Nivel de formacion:" />
 						<p:selectOneMenu id="nivelFormacion"
-							value="#{registrarPersonaBean.nivelFormacion.id}" required="true">
+							value="#{registrarPersonaBean.nivelFormacion.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstNivelFormacion}"
@@ -138,7 +150,7 @@
 
 						<p:outputLabel for="ocupacion" value="Ocupación:" />
 						<p:selectOneMenu id="ocupacion"
-							value="#{registrarPersonaBean.ocupacion.id}" required="true">
+							value="#{registrarPersonaBean.ocupacion.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstOcupacion}"
@@ -148,7 +160,7 @@
 
 						<p:outputLabel for="discapacidad" value="Discapacidad:" />
 						<p:selectOneMenu id="discapacidad"
-							value="#{registrarPersonaBean.discapacidad.id}" required="true">
+							value="#{registrarPersonaBean.discapacidad.id}" required="true" requiredMessage="Campo obligatorio." >
 							<f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"
 								noSelectionOption="true" />
 							<f:selectItems value="#{registrarPersonaBean.lstDiscapacidad}"

@@ -479,6 +479,7 @@ CREATE TABLE `persona` (
   `nombres` varchar(45) NOT NULL,
   `apellidos` varchar(45) NOT NULL,
   `tipo_documento` int(11) NOT NULL,
+  `documento_expedicion` int(11) NOT NULL,
   `genero` int(11) NOT NULL,
   `estado_civil` int(11) NOT NULL,
   `lugar_origen` int(11) NOT NULL,
@@ -511,6 +512,7 @@ CREATE TABLE `persona` (
   KEY `fk_persona_data_categoria7_idx` (`discapacidad`),
   KEY `fk_persona_data_categoria8_idx` (`nivel_formacion`),
   KEY `fk_persona_cea1_idx` (`idcea`),
+  KEY `fk_persona_data_categoria9_idx` (`documento_expedicion`),
   CONSTRAINT `fk_persona_cea1` FOREIGN KEY (`idcea`) REFERENCES `cea` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_persona_data_categoria1` FOREIGN KEY (`lugar_origen`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_persona_data_categoria2` FOREIGN KEY (`genero`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -520,8 +522,9 @@ CREATE TABLE `persona` (
   CONSTRAINT `fk_persona_data_categoria6` FOREIGN KEY (`ocupacion`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_persona_data_categoria7` FOREIGN KEY (`discapacidad`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_persona_data_categoria8` FOREIGN KEY (`nivel_formacion`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_persona_data_categoria9` FOREIGN KEY (`documento_expedicion`) REFERENCES `data_categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_tipo_documento_data_categoria1` FOREIGN KEY (`tipo_documento`) REFERENCES `data_categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +533,7 @@ CREATE TABLE `persona` (
 
 LOCK TABLES `persona` WRITE;
 /*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT INTO `persona` VALUES (1,'1075299691','Cristian','Giraldo Carmen',4,9,11,465,'2015-11-02',18,25,81,91,77,'','','','','','','','url_foto',1,'O+','Cris@','url_firma');
+INSERT INTO `persona` VALUES (1,'1075299691','Cristian','Giraldo Carmen',4,0,9,11,465,'2015-11-02',18,25,81,91,77,'','','','','','','','url_foto',1,'O+','Cris@','url_firma'),(2,'k','m','m',4,0,9,11,768,'1985-10-06',21,28,82,88,77,'X','X','','','X','','','url_foto',1,'O+','k','url_firma'),(3,'10076234','Ozzy','Osbourne',4,201,9,11,768,'1996-09-01',23,28,82,87,77,'','','','','','','X','url_foto',1,'O+','ozzy@','url_firma');
 /*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -731,4 +734,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-06 13:14:34
+-- Dump completed on 2017-09-12 14:28:16

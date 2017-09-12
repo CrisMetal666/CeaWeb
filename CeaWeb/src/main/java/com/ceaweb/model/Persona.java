@@ -134,6 +134,10 @@ public class Persona implements Serializable {
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
     private DataCategoria genero;
     
+    @JoinColumn(name = "documento_expedicion", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch=FetchType.LAZY)
+    private DataCategoria documentoExpedicion;
+    
     @JoinColumn(name = "estado_civil", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch=FetchType.LAZY)
     private DataCategoria estadoCivil;
@@ -395,7 +399,15 @@ public class Persona implements Serializable {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(DataCategoria tipoDocumento) {
+    public DataCategoria getDocumentoExpedicion() {
+		return documentoExpedicion;
+	}
+
+	public void setDocumentoExpedicion(DataCategoria documentoExpedicion) {
+		this.documentoExpedicion = documentoExpedicion;
+	}
+
+	public void setTipoDocumento(DataCategoria tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
 
@@ -431,15 +443,10 @@ public class Persona implements Serializable {
 	@Override
 	public String toString() {
 		return "Persona [id=" + id + ", identificacion=" + identificacion + ", nombres=" + nombres + ", apellidos="
-				+ apellidos + ", fechaNacimiento=" + fechaNacimiento + ", indigena=" + indigena + ", afrodecendiente="
-				+ afrodecendiente + ", desplazado=" + desplazado + ", poblacionFrontera=" + poblacionFrontera
-				+ ", cabezaFamilia=" + cabezaFamilia + ", reinsertado=" + reinsertado + ", poblacionRoom="
-				+ poblacionRoom + ", urlFoto=" + urlFoto + ", rh=" + rh + ", email=" + email + ", urlFirma=" + urlFirma
-				+ ", idcea=" + idcea.getId() + ", lugarOrigen=" + lugarOrigen.getId() + ", genero=" + genero.getId() + ", estadoCivil="
-				+ estadoCivil.getId() + ", estrato=" + estrato.getId() + ", regimenSalud=" + regimenSalud.getId() + ", ocupacion=" + ocupacion.getId()
-				+ ", discapacidad=" + discapacidad + ", nivelFormacion=" + nivelFormacion + ", tipoDocumento="
-				+ tipoDocumento.getId() +  "]";
+				+ apellidos + "]";
 	}
+
+	
 
     
     

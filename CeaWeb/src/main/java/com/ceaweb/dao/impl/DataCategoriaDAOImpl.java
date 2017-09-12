@@ -11,7 +11,6 @@ import javax.persistence.Query;
 
 import com.ceaweb.dao.IDataCategoriaDAO;
 import com.ceaweb.model.DataCategoria;
-import com.ceaweb.model.Usuario;
 
 /**
  * 
