@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import com.ceaweb.model.Cea;
 import com.ceaweb.model.DataCategoria;
@@ -19,26 +21,17 @@ import com.ceaweb.model.Persona;
 import com.ceaweb.service.IDataCategoriaService;
 import com.ceaweb.service.IPersonaService;
 
-/**
- * 
- * @author crismetal
- * 
- *         Bean escargado de controlar la vista registrarPersona encargada de
- *         registrar personas
- *
- */
 @Named
-@RequestScoped
-public class RegistrarPersonaBean implements Serializable {
+@ViewScoped
+public class ActualizarPersonaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	@Inject
+	IPersonaService personaService;
 	@Inject
 	private IDataCategoriaService dataCategoriaService;
-	@Inject
-	private IPersonaService personaService;
 	private Persona persona;
-	private Cea cea;
+	private List<Persona> lstPersonas;
 	private DataCategoria tipoDocumento;
 	private DataCategoria genero;
 	private DataCategoria estadoCivil;
@@ -49,6 +42,7 @@ public class RegistrarPersonaBean implements Serializable {
 	private DataCategoria nivelFormacion;
 	private DataCategoria ocupacion;
 	private DataCategoria discapacidad;
+	private Cea cea;
 	private List<DataCategoria> lstTipoDocumento;
 	private List<DataCategoria> lstGenero;
 	private List<DataCategoria> lstEstadoCivil;
@@ -66,12 +60,18 @@ public class RegistrarPersonaBean implements Serializable {
 	 */
 	private boolean multiculturalidad[];
 
+	private boolean visible;
+
 	@PostConstruct
 	public void init() {
 		
+		crearMensaje();
+
 		try {
-			// se reemplazara con la informacion que se guardara en la sesion
+			// este valor se reemplazara con la que se guarde en la sesion cuando se logee
+			// el usuario
 			cea = new Cea(1);
+			visible = false;
 			lstTipoDocumento = dataCategoriaService.getTipoIdentificacion();
 			lstGenero = dataCategoriaService.getGenero();
 			lstEstadoCivil = dataCategoriaService.getEstadoCivil();
@@ -85,7 +85,38 @@ public class RegistrarPersonaBean implements Serializable {
 		}
 
 		limpiarControles();
+	}
+
+	/**
+	 * recibe la informacion enviado por este mismo bean (ActualizarPersonaBean) y
+	 * muestra el mensaje
+	 * 
+	 * @see ActualizarPersonaBean.guardar
+	 */
+	private void crearMensaje() {
+
+		String mensaje[] = Faces.getFlashAttribute("mensaje");
+
+		if (mensaje == null) return;
 		
+		String titulo = "";
+		FacesMessage.Severity severidad = null;
+		
+		if(mensaje[0] == null) {
+			titulo = "Satifactorio";
+			severidad = FacesMessage.SEVERITY_INFO;
+		}else {
+			titulo = "Advertencia";
+			severidad = FacesMessage.SEVERITY_WARN;
+		}
+
+		FacesMessage message = new FacesMessage(severidad, titulo, mensaje[1]);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		
+		RequestContext.getCurrentInstance().update("mensajes");
+		
+//		Ajax.update("form");
+
 	}
 
 	/**
@@ -94,6 +125,8 @@ public class RegistrarPersonaBean implements Serializable {
 	public void limpiarControles() {
 
 		persona = new Persona();
+		lstPersonas = new ArrayList<>();
+		visible = false;
 		tipoDocumento = new DataCategoria();
 		genero = new DataCategoria();
 		estadoCivil = new DataCategoria();
@@ -111,12 +144,105 @@ public class RegistrarPersonaBean implements Serializable {
 	}
 
 	/**
+	 * Busca la persona que coincida con el texto descrito por el usuario
+	 */
+	public List<Persona> buscarPersona(String text) {
+
+		System.out.println("buscar ---- ?? " + text);
+
+		try {
+
+			lstPersonas = personaService.buscarPorNombreApellidoIdentificacion(text, cea.getId());
+
+			if (lstPersonas.isEmpty() || lstPersonas == null) {
+
+				// agregamos un elemento a la lista para que le muestre el mensaje al usuario
+				Persona per = new Persona();
+				per.setNombres("No hay similitud");
+
+				lstPersonas.add(per);
+
+			}
+
+			System.out.println("buscar ------ length " + lstPersonas.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return lstPersonas;
+	}
+
+	/**
+	 * Se ejecuta cuando seleccionan un item del autocomplete buscar
+	 * 
+	 */
+	public void onItemSelect(SelectEvent event) {
+
+		
+		System.out.println("Lista de personas"+lstPersonas.size());
+		
+		System.out.println("per id" + persona.getId());
+		System.out.println("per id" + event.getObject().toString());
+		visible = true;
+		Persona per = new Persona( Integer.parseInt(event.getObject().toString()));
+		
+		
+		
+		System.out.println("onitemselected " +  per.getIdentificacion() + " " + per.getId());
+		//System.out.println("onitemselected " +  persona.getIdentificacion() + " " + persona.getId());
+		
+		per.setIdcea(new Cea(1));
+
+		try {
+			persona = personaService.listarPorId(per);
+			System.out.println(persona.getNombreCompleto());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// llenamos los objetos para mostrarlos en la vista al usuario
+		tipoDocumento = persona.getTipoDocumento();
+		genero = persona.getGenero();
+		estadoCivil = persona.getEstadoCivil();
+		lugarOrigen = persona.getLugarOrigen();
+		documentoExpedicion = persona.getDocumentoExpedicion();
+		estrato = persona.getEstrato();
+		regimenSalud = persona.getRegimenSalud();
+		nivelFormacion = persona.getNivelFormacion();
+		ocupacion = persona.getOcupacion();
+		discapacidad = persona.getDiscapacidad();
+
+		/*
+		 * index - valor 0 - indigena 1 - afrodecendiente 2 - desplazado 3 - poblacion
+		 * frontera 4 - cabeza de familia 5 - reinsertado 6 - poblacion room
+		 */
+		multiculturalidad[0] = persona.getIndigena().trim().equals("") ? false : true; 
+		multiculturalidad[1] = persona.getAfrodecendiente().trim().equals("") ? false : true;
+		multiculturalidad[2] = persona.getDesplazado().trim().equals("") ? false : true;
+		multiculturalidad[3] = persona.getPoblacionFrontera().trim().equals("") ? false : true;
+		multiculturalidad[4] = persona.getCabezaFamilia().trim().equals("") ? false : true;
+		multiculturalidad[5] = persona.getReinsertado().trim().equals("") ? false : true;
+		multiculturalidad[6] = persona.getPoblacionRoom().trim().equals("") ? false : true;
+
+		// llenar las listas que usan los autocomplete para que omnifaces pueda trabajar
+		// correctamente
+
+		lstLugarOrigen = new ArrayList<>();
+		lstDocumentoExpedicion = new ArrayList<>();
+
+		lstLugarOrigen.add(lugarOrigen);
+		lstDocumentoExpedicion.add(documentoExpedicion);
+	}
+
+	/**
 	 * Encargado de hacer la busqueda de la ciudad que contenga la cadena
 	 * especifcada por el usuario
 	 */
 	public List<DataCategoria> buscarLugarOrigen(String text) {
 
 		try {
+			System.out.println("---- buscarLugarOrigen");
 			lstLugarOrigen = dataCategoriaService.buscarCiudadPorNombre(text);
 
 		} catch (Exception e) {
@@ -133,6 +259,7 @@ public class RegistrarPersonaBean implements Serializable {
 	public List<DataCategoria> buscarDocumentoExpedicion(String text) {
 
 		try {
+			System.out.println("---- buscarDocumentoExpedicion");
 			lstDocumentoExpedicion = dataCategoriaService.buscarCiudadPorNombre(text);
 
 		} catch (Exception e) {
@@ -143,10 +270,12 @@ public class RegistrarPersonaBean implements Serializable {
 	}
 
 	/**
-	 * metodo que registra al usuario
+	 * metodo que actualiza la persona
 	 */
-	public void guardar() {
+	public String guardar() {
 
+		// El id del Cea sera obtenido de la informacion guardada de la sesion
+		Cea cea = new Cea(1);
 		persona.setIdcea(cea);
 
 		// Por ahora enviamos datos duros
@@ -180,104 +309,67 @@ public class RegistrarPersonaBean implements Serializable {
 
 		try {
 
-			String mensaje = null;
+			personaService.modificar(persona);
 
-			if (persona.getId() != null || persona.getId() > 0) {
-
-				personaService.modificar(persona);
-
-				mensaje = "La información fue modificada exitosamente";
-
-			} else {
-				
-				personaService.registrar(persona);
-
-				mensaje = "La información fue registrada exitosamente";
-
-			}
-
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Satisfactorio", mensaje);
-			FacesContext.getCurrentInstance().addMessage(null, message);
+//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Satifactorio",
+//					"La información fue actualizada exitosamente");
+//			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			limpiarControles();
 
+			// Por problemas con el manejo del wizar y hacer update a la vista
+			// creamos el mensaje que mostrara el bean al inicializarlo
+			// el index 0 sera null si la actualizacion fue satifactoria de lo contrario se
+			// le
+			// inicializa cualquier valor
+			String mensaje[] = { null, "La información fue actualizada exitosamente" };
+			Faces.setFlashAttribute("mensaje", mensaje);
+
 		} catch (Exception e) {
+			String mensaje[] = { "", "Ha ocurrido un error, intentelo de nuevo, si el problema "
+					+ "continua contactese con el administrador" };
+			Faces.setFlashAttribute("mensaje", mensaje);
 			e.printStackTrace();
 		}
+		
+		return "actualizarPersona?faces-redirect=true";
 
 	}
 
 	/**
-	 * Verificara con la cedula de la persona si ya existe en el sistema, de ser
-	 * asi, se mostrara toda la informacion en la vista para que sea actualizado
+	 * necesario para reiniciar los formularios cuando el usuario quiera cancelar
 	 */
-	public void verificarExistencia() {
+	public String cancelar() {
 
-		persona.setIdcea(cea);
-
-		/*
-		 * Creamos otro objecto persona para q la informacion que este guardado en el
-		 * atributo persona no se pierda si la consulta de la persona devuelva un null
-		 */
-		Persona per = null;
-
-		try {
-			per = personaService.buscarPorIdentificacion(persona);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		if (per == null)
-			return;
-
-		persona = per;
-
-		// llenamos los objetos para mostrarlos en la vista al usuario
-		tipoDocumento = persona.getTipoDocumento();
-		genero = persona.getGenero();
-		estadoCivil = persona.getEstadoCivil();
-		lugarOrigen = persona.getLugarOrigen();
-		documentoExpedicion = persona.getDocumentoExpedicion();
-		estrato = persona.getEstrato();
-		regimenSalud = persona.getRegimenSalud();
-		nivelFormacion = persona.getNivelFormacion();
-		ocupacion = persona.getOcupacion();
-		discapacidad = persona.getDiscapacidad();
-
-		/*
-		 * index - valor 0 - indigena 1 - afrodecendiente 2 - desplazado 3 - poblacion
-		 * frontera 4 - cabeza de familia 5 - reinsertado 6 - poblacion room
-		 */
-		multiculturalidad[0] = persona.getIndigena().trim().equals("") ? false : true;
-		multiculturalidad[1] = persona.getAfrodecendiente().trim().equals("") ? false : true;
-		multiculturalidad[2] = persona.getDesplazado().trim().equals("") ? false : true;
-		multiculturalidad[3] = persona.getPoblacionFrontera().trim().equals("") ? false : true;
-		multiculturalidad[4] = persona.getCabezaFamilia().trim().equals("") ? false : true;
-		multiculturalidad[5] = persona.getReinsertado().trim().equals("") ? false : true;
-		multiculturalidad[6] = persona.getPoblacionRoom().trim().equals("") ? false : true;
-
-		/*
-		 * llenar las listas que usan los autocomplete para que omnifaces pueda trabajar
-		 * correctamente
-		 */
-		lstLugarOrigen = new ArrayList<>();
-		lstDocumentoExpedicion = new ArrayList<>();
-
-		lstLugarOrigen.add(lugarOrigen);
-		lstDocumentoExpedicion.add(documentoExpedicion);
-
-		RequestContext.getCurrentInstance().update("formulario");
+		return "actualizarPersona?faces-redirect=true";
 	}
 
 	/*
 	 * Getters & Setters
 	 */
+
 	public Persona getPersona() {
 		return persona;
 	}
 
 	public void setPersona(Persona persona) {
 		this.persona = persona;
+	}
+
+	public List<Persona> getLstPersonas() {
+		return lstPersonas;
+	}
+
+	public void setLstPersonas(List<Persona> lstPersonas) {
+		this.lstPersonas = lstPersonas;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	public DataCategoria getTipoDocumento() {
@@ -310,6 +402,14 @@ public class RegistrarPersonaBean implements Serializable {
 
 	public void setLugarOrigen(DataCategoria lugarOrigen) {
 		this.lugarOrigen = lugarOrigen;
+	}
+
+	public DataCategoria getDocumentoExpedicion() {
+		return documentoExpedicion;
+	}
+
+	public void setDocumentoExpedicion(DataCategoria documentoExpedicion) {
+		this.documentoExpedicion = documentoExpedicion;
 	}
 
 	public DataCategoria getEstrato() {
@@ -424,28 +524,20 @@ public class RegistrarPersonaBean implements Serializable {
 		this.lstDiscapacidad = lstDiscapacidad;
 	}
 
-	public boolean[] getMulticulturalidad() {
-		return multiculturalidad;
-	}
-
-	public void setMulticulturalidad(boolean[] multiculturalidad) {
-		this.multiculturalidad = multiculturalidad;
-	}
-
-	public DataCategoria getDocumentoExpedicion() {
-		return documentoExpedicion;
-	}
-
-	public void setDocumentoExpedicion(DataCategoria documentoExpedicion) {
-		this.documentoExpedicion = documentoExpedicion;
-	}
-
 	public List<DataCategoria> getLstDocumentoExpedicion() {
 		return lstDocumentoExpedicion;
 	}
 
 	public void setLstDocumentoExpedicion(List<DataCategoria> lstDocumentoExpedicion) {
 		this.lstDocumentoExpedicion = lstDocumentoExpedicion;
+	}
+
+	public boolean[] getMulticulturalidad() {
+		return multiculturalidad;
+	}
+
+	public void setMulticulturalidad(boolean[] multiculturalidad) {
+		this.multiculturalidad = multiculturalidad;
 	}
 
 }

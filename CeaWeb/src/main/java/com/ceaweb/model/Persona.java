@@ -106,7 +106,7 @@ public class Persona implements Serializable {
     @Column(name = "poblacion_room")
     private String poblacionRoom;
     
-    //@Basic(optional = true)
+    @Basic(optional = false)
     @Column(name = "url_foto", nullable = true)
     private String urlFoto;
     
@@ -118,7 +118,7 @@ public class Persona implements Serializable {
     @Column(name = "email")
     private String email;
     
-    //@Basic(optional = true)
+    @Basic(optional = false)
     @Column(name = "url_firma", nullable = true)
     private String urlFirma;
     
@@ -419,6 +419,16 @@ public class Persona implements Serializable {
     public void setCertificadosCeaList(List<CertificadosCea> certificadosCeaList) {
         this.certificadosCeaList = certificadosCeaList;
     }
+    
+    public String getNombreCompleto() {
+    	
+    	String nombreCompleto = "";
+    	
+    	if(nombres != null && apellidos != null) {
+    		nombreCompleto = nombres + " " + apellidos;
+    	}
+    	return nombreCompleto;
+    }
 
     @Override
     public int hashCode() {
@@ -442,8 +452,7 @@ public class Persona implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Persona [id=" + id + ", identificacion=" + identificacion + ", nombres=" + nombres + ", apellidos="
-				+ apellidos + "]";
+		return "";
 	}
 
 	

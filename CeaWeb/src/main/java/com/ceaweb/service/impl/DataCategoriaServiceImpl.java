@@ -3,6 +3,7 @@ package com.ceaweb.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -20,6 +21,15 @@ public class DataCategoriaServiceImpl implements IDataCategoriaService, Serializ
 	
 	@EJB
 	private IDataCategoriaDAO DataCategoriaDAO;
+	/**
+	 * acomodara los nombres de las ciudades
+	 */
+	private FormatearCadena formatearCadena;
+	
+	@PostConstruct
+	public void init() {
+		formatearCadena = new FormatearCadena();
+	}
 
 	@Override
 	public void registrar(DataCategoria entidad) throws Exception {
@@ -38,7 +48,7 @@ public class DataCategoriaServiceImpl implements IDataCategoriaService, Serializ
 	@Override
 	public List<DataCategoria> listarTodos() throws Exception {
 		
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.listarTodos());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.listarTodos());
 	}
 
 	@Override
@@ -50,67 +60,67 @@ public class DataCategoriaServiceImpl implements IDataCategoriaService, Serializ
 	@Override
 	public List<DataCategoria> getJornada() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getJornada());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getJornada());
 	}
 
 	@Override
 	public List<DataCategoria> getTipoIdentificacion() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getTipoIdentificacion());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getTipoIdentificacion());
 	}
 
 	@Override
 	public List<DataCategoria> getGenero() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getGenero());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getGenero());
 	}
 
 	@Override
 	public List<DataCategoria> getEstadoCivil() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getEstadoCivil());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getEstadoCivil());
 	}
 
 	@Override
 	public List<DataCategoria> getLugarOrigen() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getLugarOrigen());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getLugarOrigen());
 	}
 
 	@Override
 	public List<DataCategoria> getEstrato() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getEstrato());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getEstrato());
 	}
 
 	@Override
 	public List<DataCategoria> getRegimenSalud() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getRegimenSalud());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getRegimenSalud());
 	}
 
 	@Override
 	public List<DataCategoria> getNivelFormacion() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getNivelFormacion());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getNivelFormacion());
 	}
 
 	@Override
 	public List<DataCategoria> getOcupacion() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getOcupacion());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getOcupacion());
 	}
 
 	@Override
 	public List<DataCategoria> getDiscapacidad() throws Exception {
 
-		return FormatearCadena.formatearCadena(DataCategoriaDAO.getDiscapacidad());
+		return formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.getDiscapacidad());
 	}
 
 	@Override
 	public List<DataCategoria> buscarCiudadPorNombre(String nombre) throws Exception {
 		
-		List<DataCategoria> lista = FormatearCadena.formatearCadena(DataCategoriaDAO.buscarCiudadPorNombre(nombre));
+		List<DataCategoria> lista = DataCategoriaDAO.buscarCiudadPorNombre(nombre);
 		
 		if(lista == null || lista.isEmpty()) {
 			
@@ -121,6 +131,8 @@ public class DataCategoriaServiceImpl implements IDataCategoriaService, Serializ
 			
 			lista.add(dataCategoria);
 			
+		}else {
+			lista = formatearCadena.formatearListaDataCategoria(DataCategoriaDAO.buscarCiudadPorNombre(nombre));
 		}
 		
 		return lista;

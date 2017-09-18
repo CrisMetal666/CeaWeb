@@ -1,15 +1,260 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 
 <ui:composition template="/WEB-INF/templates/plantilla.xhtml">
 
-	<ui:define name="title">Inicio</ui:define>
+	<ui:define name="title">Actualizar</ui:define>
 
 	<ui:define name="content">
+
+		<!--  -->
+		<h:form id="form">
+
+
+			<h:panelGrid columns="2"
+				rendered="#{actualizarPersonaBean.visible eq false}">
+
+				<p:outputLabel value="Buscar: " />
+				<p:autoComplete value="#{actualizarPersonaBean.persona.id}"
+					completeMethod="#{actualizarPersonaBean.buscarPersona}" var="per"
+					itemLabel="#{per.nombreCompleto}" itemValue="#{per.id}"
+					forceSelection="true" minQueryLength="6"
+					requiredMessage="Campo obligatorio.">
+
+					
+					<p:ajax event="itemSelect"
+						listener="#{actualizarPersonaBean.onItemSelect}" update="form" />
+
+				</p:autoComplete>
+
+			</h:panelGrid>
+
+			<p:messages id="mensajes" autoUpdate="false" closable="true"
+				showDetail="true" />
+
+			<p:wizard rendered="#{actualizarPersonaBean.visible eq true}"
+				backLabel="Anterior" nextLabel="Siguiente" widgetVar="wiz" id="wiz">
+
+				<p:tab id="personal" title="Personal">
+
+					<h:panelGrid columns="3">
+
+						<p:outputLabel for="nombres" value="Nombres:" />
+						<p:inputText id="nombres"
+							value="#{actualizarPersonaBean.persona.nombres}" required="true"
+							requiredMessage="Campo obligatorio." />
+						<p:message for="nombres" display="text" />
+
+						<p:outputLabel for="apellidos" value="Apellidos:" />
+						<p:inputText id="apellidos"
+							value="#{actualizarPersonaBean.persona.apellidos}"
+							required="true" requiredMessage="Campo obligatorio." />
+						<p:message for="apellidos" display="text" />
+
+						<p:outputLabel for="tipoDocumento" value="Tipo documento:" />
+						<p:selectOneMenu id="tipoDocumento"
+							value="#{actualizarPersonaBean.tipoDocumento.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstTipoDocumento}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="tipoDocumento" display="text" />
+
+						<p:outputLabel for="identificacion" value="Identificación:" />
+						<p:inputText id="identificacion"
+							value="#{actualizarPersonaBean.persona.identificacion}"
+							required="true" requiredMessage="Campo obligatorio." />
+						<p:message for="identificacion" display="text" />
+
+						<p:outputLabel for="documentoExpedicion"
+							value="Expedicion del documento:" />
+						<p:autoComplete id="documentoExpedicion"
+							value="#{actualizarPersonaBean.documentoExpedicion}"
+							completeMethod="#{actualizarPersonaBean.buscarDocumentoExpedicion}"
+							var="ciudad" itemLabel="#{ciudad.nombre}" itemValue="#{ciudad}"
+							forceSelection="true" minQueryLength="4" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<o:converter converterId="omnifaces.ListConverter"
+								list="#{actualizarPersonaBean.lstDocumentoExpedicion}" />
+
+						</p:autoComplete>
+						<p:message for="documentoExpedicion" display="text" />
+
+						<p:outputLabel for="correo" value="Correo:" />
+						<p:inputText id="correo"
+							value="#{actualizarPersonaBean.persona.email}" required="true"
+							requiredMessage="Campo obligatorio." />
+						<p:message for="correo" display="text" />
+
+						<p:outputLabel for="rh" value="Rh:" />
+						<p:selectOneMenu id="rh"
+							value="#{actualizarPersonaBean.persona.rh}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItem itemLabel="O+" itemValue="O+" />
+							<f:selectItem itemLabel="O-" itemValue="O-" />
+							<f:selectItem itemLabel="A+" itemValue="A+" />
+							<f:selectItem itemLabel="A-" itemValue="A-" />
+							<f:selectItem itemLabel="B+" itemValue="B+" />
+							<f:selectItem itemLabel="B-" itemValue="B-" />
+							<f:selectItem itemLabel="AB+" itemValue="AB+" />
+							<f:selectItem itemLabel="AB-" itemValue="AB-" />
+						</p:selectOneMenu>
+						<p:message for="rh" display="text" />
+
+						<p:outputLabel for="genero" value="Genero:" />
+						<p:selectOneMenu id="genero"
+							value="#{actualizarPersonaBean.genero.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstGenero}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="genero" display="text" />
+
+						<p:outputLabel for="estadoCivil" value="Estado civil:" />
+						<p:selectOneMenu id="estadoCivil"
+							value="#{actualizarPersonaBean.estadoCivil.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstEstadoCivil}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="estadoCivil" display="text" />
+
+						<p:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento:" />
+						<p:calendar id="fechaNacimiento"
+							value="#{actualizarPersonaBean.persona.fechaNacimiento}"
+							required="true" pattern="dd/MM/yyyy"
+							requiredMessage="Campo obligatorio." />
+						<p:message for="fechaNacimiento" display="text" />
+
+						<p:outputLabel for="lugarOrigen" value="Lugar de origen:" />
+						<p:autoComplete id="lugarOrigen"
+							value="#{actualizarPersonaBean.lugarOrigen}"
+							completeMethod="#{actualizarPersonaBean.buscarLugarOrigen}"
+							var="ciudad" itemLabel="#{ciudad.nombre}" itemValue="#{ciudad}"
+							forceSelection="true" minQueryLength="4" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<o:converter converterId="omnifaces.ListConverter"
+								list="#{actualizarPersonaBean.lstLugarOrigen}" />
+
+						</p:autoComplete>
+						<p:message for="lugarOrigen" display="text" />
+
+						<p:outputLabel for="estrato" value="Estrato:" />
+						<p:selectOneMenu id="estrato"
+							value="#{actualizarPersonaBean.estrato.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstEstrato}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="estrato" display="text" />
+
+						<p:outputLabel for="regimenSalud" value="Regimen de salud:" />
+						<p:selectOneMenu id="regimenSalud"
+							value="#{actualizarPersonaBean.regimenSalud.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstRegimenSalud}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="regimenSalud" display="text" />
+
+						<p:outputLabel for="nivelFormacion" value="Nivel de formacion:" />
+						<p:selectOneMenu id="nivelFormacion"
+							value="#{actualizarPersonaBean.nivelFormacion.id}"
+							required="true" requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstNivelFormacion}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="nivelFormacion" display="text" />
+
+						<p:outputLabel for="ocupacion" value="Ocupación:" />
+						<p:selectOneMenu id="ocupacion"
+							value="#{actualizarPersonaBean.ocupacion.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstOcupacion}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="ocupacion" display="text" />
+
+						<p:outputLabel for="discapacidad" value="Discapacidad:" />
+						<p:selectOneMenu id="discapacidad"
+							value="#{actualizarPersonaBean.discapacidad.id}" required="true"
+							requiredMessage="Campo obligatorio.">
+
+							<f:selectItems value="#{actualizarPersonaBean.lstDiscapacidad}"
+								var="item" itemLabel="#{item.nombre}" itemValue="#{item.id}" />
+						</p:selectOneMenu>
+						<p:message for="discapacidad" display="text" />
+
+					</h:panelGrid>
+
+				</p:tab>
+
+				<p:tab id="multiculturalidad" title="Multiculturalidad">
+
+					<h:panelGrid columns="2">
+
+
+						<p:outputLabel value="Indigena" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[0]}" />
+
+						<p:outputLabel value="Afrodecendiente" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[1]}" />
+
+						<p:outputLabel value="Desplazado" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[2]}" />
+
+						<p:outputLabel value="Población frontera" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[3]}" />
+
+						<p:outputLabel value="Cabeza de familia" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[4]}" />
+
+						<p:outputLabel value="Reinsertado" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[5]}" />
+
+						<p:outputLabel value="Poblacion room" />
+						<p:selectBooleanCheckbox
+							value="#{actualizarPersonaBean.multiculturalidad[6]}" />
+
+						<p:commandButton value="Actualizar"
+							action="#{actualizarPersonaBean.guardar()}" />
+						<p:commandButton value="Cancelar"
+							action="#{actualizarPersonaBean.cancelar()}" />
+
+
+
+					</h:panelGrid>
+
+				</p:tab>
+
+
+			</p:wizard>
+
+
+		</h:form>
+
+
 
 
 	</ui:define>
