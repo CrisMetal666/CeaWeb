@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -28,7 +28,7 @@ import com.ceaweb.service.IPersonaService;
  *
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class RegistrarPersonaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -182,7 +182,7 @@ public class RegistrarPersonaBean implements Serializable {
 
 			String mensaje = null;
 
-			if (persona.getId() != null || persona.getId() > 0) {
+			if (persona.getId() != null && persona.getId() > 0) {
 
 				personaService.modificar(persona);
 
@@ -227,8 +227,11 @@ public class RegistrarPersonaBean implements Serializable {
 			e.printStackTrace();
 		}
 
-		if (per == null)
+		if (per == null) {
+			persona.setId(null);
 			return;
+		}
+			
 
 		persona = per;
 

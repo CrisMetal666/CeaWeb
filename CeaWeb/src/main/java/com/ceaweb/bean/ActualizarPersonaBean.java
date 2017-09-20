@@ -148,8 +148,6 @@ public class ActualizarPersonaBean implements Serializable {
 	 */
 	public List<Persona> buscarPersona(String text) {
 
-		System.out.println("buscar ---- ?? " + text);
-
 		try {
 
 			lstPersonas = personaService.buscarPorNombreApellidoIdentificacion(text, cea.getId());
@@ -164,7 +162,6 @@ public class ActualizarPersonaBean implements Serializable {
 
 			}
 
-			System.out.println("buscar ------ length " + lstPersonas.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -178,26 +175,16 @@ public class ActualizarPersonaBean implements Serializable {
 	 */
 	public void onItemSelect(SelectEvent event) {
 
-		
-		System.out.println("Lista de personas"+lstPersonas.size());
-		
-		System.out.println("per id" + persona.getId());
-		System.out.println("per id" + event.getObject().toString());
 		visible = true;
 		Persona per = new Persona( Integer.parseInt(event.getObject().toString()));
-		
-		
-		
-		System.out.println("onitemselected " +  per.getIdentificacion() + " " + per.getId());
-		//System.out.println("onitemselected " +  persona.getIdentificacion() + " " + persona.getId());
 		
 		per.setIdcea(new Cea(1));
 
 		try {
 			persona = personaService.listarPorId(per);
-			System.out.println(persona.getNombreCompleto());
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -242,7 +229,7 @@ public class ActualizarPersonaBean implements Serializable {
 	public List<DataCategoria> buscarLugarOrigen(String text) {
 
 		try {
-			System.out.println("---- buscarLugarOrigen");
+			
 			lstLugarOrigen = dataCategoriaService.buscarCiudadPorNombre(text);
 
 		} catch (Exception e) {
@@ -259,7 +246,7 @@ public class ActualizarPersonaBean implements Serializable {
 	public List<DataCategoria> buscarDocumentoExpedicion(String text) {
 
 		try {
-			System.out.println("---- buscarDocumentoExpedicion");
+			
 			lstDocumentoExpedicion = dataCategoriaService.buscarCiudadPorNombre(text);
 
 		} catch (Exception e) {
@@ -310,10 +297,6 @@ public class ActualizarPersonaBean implements Serializable {
 		try {
 
 			personaService.modificar(persona);
-
-//			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Satifactorio",
-//					"La información fue actualizada exitosamente");
-//			FacesContext.getCurrentInstance().addMessage(null, message);
 
 			limpiarControles();
 
